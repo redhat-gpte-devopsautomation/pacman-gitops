@@ -1,0 +1,52 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: pacman
+  namespace: pacman
+  annotations:
+    apps.open-cluster-management.io/deployables: ''
+    apps.open-cluster-management.io/subscriptions: pacman/pacman-subscription-1
+spec:
+  componentKinds:
+    - group: apps.open-cluster-management.io
+      kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - pacman
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: pacman-subscription-1
+  namespace: pacman
+  annotations:
+    apps.open-cluster-management.io/git-branch: ''
+    apps.open-cluster-management.io/git-path: ''
+    apps.open-cluster-management.io/reconcile-option: merge
+  labels:
+    app: pacman
+spec:
+  channel: gm-redhat-gpte-devopsautomation-pacman-1-tree-master-kube-ns/gm-redhat-gpte-devopsautomation-pacman-1-tree-master-kube
+  placement:
+    placementRef:
+      name: pacman-placement-1
+      kind: PlacementRule
+posthooks: {}
+prehooks: {}
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: pacman-placement-1
+  namespace: pacman
+  annotations:
+  labels:
+    app: pacman
+spec:
+  clusterSelector:
+    matchLabels:
+      app: pacman
