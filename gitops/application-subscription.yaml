@@ -1,3 +1,14 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: pacman-channel
+  namespace: pacman
+  annotations:
+    apps.open-cluster-management.io/reconcile-rate: high
+spec:
+  pathname: https://github.com/redhat-gpte-devopsautomation/pacman-1
+  type: Git
+---
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
@@ -25,12 +36,12 @@ metadata:
   namespace: pacman
   annotations:
     apps.open-cluster-management.io/git-branch: ''
-    apps.open-cluster-management.io/git-path: ''
+    apps.open-cluster-management.io/git-path: 'kube'
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: pacman
 spec:
-  channel: gm-redhat-gpte-devopsautomation-pacman-1-tree-master-kube-ns/gm-redhat-gpte-devopsautomation-pacman-1-tree-master-kube
+  channel: pacman/pacman-channel
   placement:
     placementRef:
       name: pacman-placement-1
